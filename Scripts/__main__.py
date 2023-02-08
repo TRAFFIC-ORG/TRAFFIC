@@ -1,121 +1,120 @@
 import pygame
+
+#constants
+#---------
+WIDTH = 1000
+HEIGHT = 700
+FPS = 60
 BLACK = ( 0, 0, 0)
 WHITE = ( 255, 255, 255)
 GREEN = ( 0, 255, 0)
 RED = ( 255, 0, 0)
+
+#class
+#----------
+
+class Button(object):
+
+    #Initialization function
+    def __init__(self, position, size, color, text):
+
+        self.image = pygame.Surface(size)
+        self.image.fill(color)
+        self.rect = pygame.Rect((0,0), size)
+
+        font = pygame.font.SysFont(None, 32)
+        text = font.render(text, True, (0,0,0))
+        text_rect = text.get_rect()
+        text_rect.center = self.rect.center
+
+        self.image.blit(text, text_rect)
+
+        # set after centering text
+        self.rect.topleft = position
+    #Function to draw the button
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+    #Function to check if the button is pressed
+    def is_clicked(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                return self.rect.collidepoint(event.pos)
+
+#Function for the first screen
+def mainMenu(screen):
+
+    #Creating the buttons
+    goToSim = Button((400, 200), (200, 100), RED, "Start Sim")
+    goToOptions = Button((400, 320), (200,100), RED, "Options")
+    goToSave = Button((400, 440), (200, 100), RED, "Save/Load")
+    exitButton = Button((400, 560), (200, 100), RED, "EXIT")
+
+    # Main loop for main menu
+
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+
+        # - events -
+        #Checking for events
+        for event in pygame.event.get():
+            #If someone presses the X in the corner
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            #If someone presses escape key
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+
+            #If someone presses the go to sim button
+            if goToSim.is_clicked(event):
+                # go to simScreen
+                simScreen(screen)
+            
+            #If someone presses go to options
+            if goToOptions.is_clicked(event):
+                optionsScreen(screen)
+            
+             #If someone presses go to options
+            if goToSave.is_clicked(event):
+                saveLoadScreen(screen)
+
+            #If someone presses the exit button
+            if exitButton.is_clicked(event):
+                # exit
+                pygame.quit()
+                exit()
+
+        #Draw all of the buttons on the screen
+        screen.fill((255,255,255))    
+        goToSim.draw(screen)
+        goToSave.draw(screen)
+        goToOptions.draw(screen)
+        exitButton.draw(screen)
+        pygame.display.flip()
+
+        # - FPS -
+
+        clock.tick(FPS)
+
+def simScreen(screen):
+    pass
+
+def optionsScreen(screen):
+    pass
+
+def saveLoadScreen(screen):
+    pass
+
+# MAIN LOGIC
+# ----------
+#Initialize pygame
 pygame.init()
-
-
-size = (1300, 900)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("TRAFFIC")
-
-
-# The loop will carry on until the user exits the game (e.g. clicks the close button).
-carryOn = True
- 
-# The clock will be used to control how fast the screen updates
-clock = pygame.time.Clock()
- 
-#Creating class for the screen
-class Screen:
-    def __init__(self, title, size, fill=WHITE):
-        self.title = title
-        self.size = size
-        self.isActive = False
-        self.fill = WHITE
-    
-    def makeActiveScreen(self):
-        pygame.display.set_caption(self.title)
-        self.isActive = True
-        self.screen = pygame.display.set_mode(self.size)
-
-    def screenUpdate(self):
-        if (self.isActive):
-            self.screen.fill(self.fill)
-    def endScreen(self):
-        self.isActive = False
-    def checkActive(self):
-        #self.fill = fill
-        return self.isActive
-
-
-#Creating class for the button
-class Button:
-    #Initializing the button
-    def __init__(self, text, pos, font, bg="black"):
-         self.x, self.y = pos
-         self.font = pygame.font.SysFont("Arial", font)
-         self.changeText(text, bg)
-
-    #Method for changing the text based on what you want
-    def changeText(self, text, bg="black"):
-        self.text = self.font.render(text, 1, pygame.Color("White"))
-        self.size = self.text.get_size()
-        self.surface = pygame.Surface(self.size)
-        self.surface.fill(bg)
-        self.surface.blit(self.text, (0, 0))
-        self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
-
-    #Method for showing the button
-    def show(self):
-        screen.blit(self.surface, (self.x,self.y))
-
-    #Method for when the button is clicked
-    def click(self, event):
-        x, y = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN: 
-            if self.rect.collidepoint(x, y):
-                return True
-            else:
-                return False
-
-
-# -------- Main Program Loop -----------
-mainScreen = Screen("Main", (1200, 900))
-testScreen = Screen("Test", (1000, 400))
-window = mainScreen.makeActiveScreen()
-button1 = Button("Test", (100,100), font=30, bg="navy")
-
-
-while carryOn:
-    # --- Main event loop
-    mainScreen.screenUpdate()
-
-    button1.show()
-
-    for event in pygame.event.get(): # User did something
-        if event.type == pygame.QUIT: # If user clicked close
-              carryOn = False # Flag that we are done so we can exit the while loop
-        if mainScreen.checkActive():
-            buttonPressed = button1.click(event)
-        if buttonPressed:
-            testScreen.makeActiveScreen()
-            mainScreen.endScreen()
-
-
-
-    
-            
-            
-     # --- Game logic should go here
- 
-     # --- Drawing code should go here
-     #
-     #We should add a background immage here
-    
-    pygame.display.update()
-    #The you can draw different shapes and lines or add text to your background stage.
-    
-
-
-    # --- Go ahead and update the screen with what we've drawn.
-    
-
-    # --- Limit to 60 frames per second
-    clock.tick(60)
- 
-#Once we have exited the main program loop we can stop the game engine:
-
+#Create the screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+#Start the sim
+mainMenu(screen)
+#End the sim
 pygame.quit()
-print("hello")
