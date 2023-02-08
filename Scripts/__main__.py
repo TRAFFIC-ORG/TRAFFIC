@@ -42,7 +42,6 @@ class Button(object):
 
 #Function for the first screen
 def mainMenu(screen):
-
     #Creating the buttons
     goToSim = Button((400, 200), (200, 100), RED, "Start Sim")
     goToOptions = Button((400, 320), (200,100), RED, "Options")
@@ -96,11 +95,41 @@ def mainMenu(screen):
         pygame.display.flip()
 
         # - FPS -
-
         clock.tick(FPS)
 
+#Function for the Sim Screen
 def simScreen(screen):
-    pass
+    simRunning = True
+    clock = pygame.time.Clock()
+    goBack = Button((5, 25), (120, 40), RED, "Main Menu")
+    while simRunning:
+        #Checking for events
+        for event in pygame.event.get():
+            #If someone presses the X in the corner
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+             #If someone presses go to options
+            if goBack.is_clicked(event):
+                mainMenu(screen)
+        
+        screen.fill((255,255,255))   
+        vertRoads = 8;
+        horizontalRoads = 6;
+        #Draw Screen
+        currentX = 150;
+        for i in range(vertRoads):
+            pygame.draw.line(screen, BLACK, [currentX, 0], [currentX, HEIGHT], 40)
+            currentX += 100
+
+        currentY = 100;
+        for i in range(horizontalRoads):
+            pygame.draw.line(screen, BLACK, [0, currentY], [WIDTH, currentY], 40)
+            currentY += 100
+        
+        goBack.draw(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
 
 def optionsScreen(screen):
     pass
