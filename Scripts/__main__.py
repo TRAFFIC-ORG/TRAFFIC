@@ -132,14 +132,80 @@ def simScreen(screen):
         clock.tick(FPS)
 
 def optionsScreen(screen):
-    pass
+    optionsRunning = True
+    clock = pygame.time.Clock()
+    num_sim_options = [1, 10, 20, 50, 100]
+    num_sim_index = 0
+    sim_num = 1
+    goBack = Button((350, 500), (300, 50), RED, "Main Menu")
+    show_graphics_button = Button(
+        (350, 400), (300, 50), RED, "Show Graphics: No")
+    show_graphics = False
+    simulations_button = Button(
+        (350, 300), (300, 50), RED, "Simulations: " + str(num_sim_options[num_sim_index]))
+
+    while optionsRunning:
+
+        # Checking for events
+        for event in pygame.event.get():
+            # If someone presses the X in the corner
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+             # If someone presses go to options
+            if goBack.is_clicked(event):
+                mainMenu(screen)
+
+            if show_graphics_button.is_clicked(event):
+                if show_graphics == False and sim_num == 1:
+                    show_graphics = True
+                    show_graphics_button = Button(
+                        (350, 400), (300, 50), RED, "Show Graphics: Yes")
+                else:
+                    show_graphics = False
+                    show_graphics_button = Button(
+                        (350, 400), (300, 50), RED, "Show Graphics: No")
+
+            if simulations_button.is_clicked(event):
+                if sim_num == 1:
+                    sim_num = 10
+                    simulations_button = Button(
+                        (350, 300), (300, 50), RED, "Simulations: 10")
+                elif sim_num == 10:
+                    sim_num = 20
+                    simulations_button = Button(
+                        (350, 300), (300, 50), RED, "Simulations: 20")
+                elif sim_num == 20:
+                    sim_num = 50
+                    simulations_button = Button(
+                        (350, 300), (300, 50), RED, "Simulations: 50")
+                elif sim_num == 50:
+                    sim_num = 100
+                    simulations_button = Button(
+                        (350, 300), (300, 50), RED, "Simulations: 100")
+                elif sim_num == 100:
+                    sim_num = 1
+                    simulations_button = Button(
+                        (350, 300), (300, 50), RED, "Simulations: 1")
+                if sim_num > 1:
+                    show_graphics = False
+                    show_graphics_button = Button(
+                        (350, 400), (300, 50), RED, "Show Graphics: No")
+
+            # Draw Screen
+            screen.fill((255, 255, 255))
+            goBack.draw(screen)
+            show_graphics_button.draw(screen)
+            simulations_button.draw(screen)
+            pygame.display.flip()
+            clock.tick(FPS)
 
 def saveLoadScreen(screen):
     #Creating the buttons
     goToMenu = Button((400, 100), (200, 100), RED, "Menu")
     saveButton = Button((400, 340), (200, 100), RED, "Save")
     loadButton = Button((400, 460), (200, 100), RED, "Load")
-    exitButton = Button((400, 580), (200, 100), RED, "EXIT")
 
     # Main loop for save menu
 
@@ -172,18 +238,12 @@ def saveLoadScreen(screen):
             if loadButton.is_clicked(event):
                 pass #set up load feature
             
-            #If someone presses the exit button
-            if exitButton.is_clicked(event):
-                # exit
-                pygame.quit()
-                exit()
 
         #Draw all of the buttons on the screen
         screen.fill((255,255,255))    
         goToMenu.draw(screen)
         saveButton.draw(screen)
         loadButton.draw(screen)
-        exitButton.draw(screen)
         pygame.display.flip()
 
         # - FPS -
