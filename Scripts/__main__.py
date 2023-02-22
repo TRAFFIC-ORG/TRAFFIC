@@ -103,7 +103,7 @@ def simScreen(screen):
     clock = pygame.time.Clock()
     goBack = Button((5, 25), (120, 40), RED, "Main Menu")
     perceptronTest = Perceptron(3)
-    perceptronTest.createSum()
+    perceptronTest.createSum([1,1])
     while simRunning:
         #Checking for events
         for event in pygame.event.get():
