@@ -114,15 +114,15 @@ def simScreen(screen):
                 mainMenu(screen)
         
         screen.fill((255,255,255))   
-        vertRoads = 8
-        horizontalRoads = 6
+        vertRoads = 8;
+        horizontalRoads = 6;
         #Draw Screen
-        currentX = 150
+        currentX = 150;
         for i in range(vertRoads):
             pygame.draw.line(screen, BLACK, [currentX, 0], [currentX, HEIGHT], 40)
             currentX += 100
 
-        currentY = 100
+        currentY = 100;
         for i in range(horizontalRoads):
             pygame.draw.line(screen, BLACK, [0, currentY], [WIDTH, currentY], 40)
             currentY += 100

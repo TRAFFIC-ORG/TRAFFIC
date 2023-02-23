@@ -108,7 +108,7 @@ def simScreen(screen):
     for node in nodes:
         dictionary[node] = {}
 
-    dictionary[1][2] = 1
+    dictionary[1][2] = 1 
     dictionary[1][4] = 1
     dictionary[2][5] = 1 
     dictionary[2][3] = 1
@@ -133,18 +133,13 @@ def simScreen(screen):
 
     
     grid = TrafficLights(nodes, dictionary, screen, nodePositions)
-
-    path = grid.generatePath(1, 9)
-
-
-    print(path)
+    print(list(grid.getNodes()))
 ############################################
 
     simRunning = True
     clock = pygame.time.Clock()
     goBack = Button((5, 25), (120, 40), RED, "Main Menu")
     while simRunning:
-
         #Checking for events
         for event in pygame.event.get():
             #If someone presses the X in the corner

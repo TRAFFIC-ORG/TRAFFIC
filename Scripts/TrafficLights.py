@@ -29,12 +29,11 @@ class TrafficLights(object):
         connectingNodes = []
         for outGoingNode in self.nodes:
             if self.grid[node].get(outGoingNode,False) != False:
-                connectingNodes.append(outGoingNode)
+                connectingNodes.append[outGoingNode]
         return connectingNodes
     
     def getValues(self, node1, node2):
         return self.grid[node1][node2]
-
 
     def generatePath(self, startingNode, endNode):
         unvisitedNodes = list(self.nodes)
@@ -70,8 +69,6 @@ class TrafficLights(object):
         return path
 
     def drawNodes(self):
-        # print("Drawing Nodes")
         for node in self.nodes:
             pos = self.nodePositions[node] 
             pg.draw.circle(self.screen, (255, 0, 0), pos, 10)
-            
