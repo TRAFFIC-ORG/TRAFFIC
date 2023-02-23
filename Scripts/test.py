@@ -1,6 +1,6 @@
 from TrafficLights import *
 import pygame
-
+import math
 #constants
 #---------
 WIDTH = 1000
@@ -48,6 +48,7 @@ def mainMenu(screen):
     goToOptions = Button((400, 320), (200,100), RED, "Options")
     goToSave = Button((400, 440), (200, 100), RED, "Save/Load")
     exitButton = Button((400, 560), (200, 100), RED, "EXIT")
+
 
     # Main loop for main menu
 
@@ -101,39 +102,46 @@ def mainMenu(screen):
 #Function for the Sim Screen
 def simScreen(screen):
 ##############################################
-    dictionary = {}
 
-    nodes = [1,2,3,4,5,6,7,8,9]
+    vertRoads = 8
+    horzRoads = 8
+    startX = 150
+    startY = 100
+    roadIncrementX = 100
+    roadIncrementY = 80
 
-    for node in nodes:
-        dictionary[node] = {}
-
-    dictionary[1][2] = 1 
-    dictionary[1][4] = 1
-    dictionary[2][5] = 1 
-    dictionary[2][3] = 1
-    dictionary[3][6] = 1 
-    dictionary[4][5] = 1
-    dictionary[5][6] = 1 
-    dictionary[4][7] = 1
-    dictionary[5][8] = 1 
-    dictionary[6][9] = 1
-    dictionary[7][8] = 1 
-    dictionary[8][9] = 1
+    #Creating the dict for nodes as well as the dict for nodePositions and list of nodes
+    nodeDict = {}
     nodePositions = {}
-    nodePositions[1] = [150, 100]
-    nodePositions[2] = [250, 100]
-    nodePositions[3] = [350, 100]
-    nodePositions[4] = [150, 200]
-    nodePositions[5] = [250, 200]
-    nodePositions[6] = [350, 200]
-    nodePositions[7] = [150, 300]
-    nodePositions[8] = [250, 300]
-    nodePositions[9] = [350, 300]
+    nodes = []
 
+    #Creating the nodes list based on the ammount of vertical and horizontal nodes
+    for i in range(vertRoads*horzRoads):
+        nodes.append(i)
+
+    #Assign nodes positions based on the number of roads and gaps given
+    for node in nodes:
+        nodeDict[node] = {}
+        nodePositions[node] = [startX + (roadIncrementX * ((node) % horzRoads)), startY + (roadIncrementY * math.floor((node) / vertRoads))]
+
+
+    #Adding nodes to the node dictionary and giving them weight 1
+    i = 0
+    #horizonally connecting the roads
+    for horizonal in range(horzRoads):
+        for vertical in range(vertRoads-1):
+            nodeDict[vertical+(horizonal*vertRoads)][vertical+1+(horizonal*vertRoads)] = 1
+           
+    for vertical in range(vertRoads):
+        for horizontal in range(horzRoads-1):
+            nodeDict[(horizontal*horzRoads)+vertical][((horizontal+1)*horzRoads)+vertical] = 1
+    print(nodeDict)
+
+    print(nodePositions);
+    grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
+    print(list(grid.grid))
+    path = grid.generatePath(0, 27)
     
-    grid = TrafficLights(nodes, dictionary, screen, nodePositions)
-    print(list(grid.getNodes()))
 ############################################
 
     simRunning = True
@@ -151,20 +159,19 @@ def simScreen(screen):
                 mainMenu(screen)
         
         screen.fill((255,255,255))   
-        vertRoads = 8;
-        horizontalRoads = 6;
-        #Draw Screen
-        currentX = 150;
-        for i in range(vertRoads):
-            pygame.draw.line(screen, BLACK, [currentX, 0], [currentX, HEIGHT], 40)
-            currentX += 100
 
-        currentY = 100;
-        for i in range(horizontalRoads):
-            pygame.draw.line(screen, BLACK, [0, currentY], [WIDTH, currentY], 40)
-            currentY += 100
+        #Draw Screen
+        startX = 150
+        startY = 100
+        for i in range(vertRoads):
+            pygame.draw.line(screen, BLACK, [startX, 0], [startX, HEIGHT], 40)
+            startX += roadIncrementX
+
+        for i in range(horzRoads):
+            pygame.draw.line(screen, BLACK, [0, startY], [WIDTH, startY], 40)
+            startY += roadIncrementY
         
-        grid.drawNodes()
+        grid.drawNodes(path, 0, 27)
         goBack.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

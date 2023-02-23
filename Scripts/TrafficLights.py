@@ -1,5 +1,11 @@
 import sys
 import pygame as pg
+
+BLACK = ( 0, 0, 0)
+WHITE = ( 255, 255, 255)
+GREEN = ( 0, 255, 0)
+RED = ( 255, 0, 0)
+BLUE = (0,0,255)
 class TrafficLights(object):
     def __init__(self, nodes, initGrid, screen, nodePositions):
         self.nodes = nodes
@@ -29,7 +35,7 @@ class TrafficLights(object):
         connectingNodes = []
         for outGoingNode in self.nodes:
             if self.grid[node].get(outGoingNode,False) != False:
-                connectingNodes.append[outGoingNode]
+                connectingNodes.append(outGoingNode)
         return connectingNodes
     
     def getValues(self, node1, node2):
@@ -60,6 +66,8 @@ class TrafficLights(object):
 
         path = []
         temp_node = endNode
+        print("Visited Nodes")
+        print(visitedNodes)
         while temp_node != startingNode:
             path.append(temp_node)
             temp_node = visitedNodes[temp_node]
@@ -68,7 +76,14 @@ class TrafficLights(object):
         
         return path
 
-    def drawNodes(self):
+    def drawNodes(self, path, startNode, endNode):
         for node in self.nodes:
             pos = self.nodePositions[node] 
-            pg.draw.circle(self.screen, (255, 0, 0), pos, 10)
+            if node == startNode:
+                 pg.draw.circle(self.screen, WHITE, pos, 10)
+            elif node == endNode:
+                pg.draw.circle(self.screen, BLUE, pos, 10)
+            elif node in path:
+                pg.draw.circle(self.screen, GREEN, pos, 10)
+            else:
+                pg.draw.circle(self.screen, RED, pos, 10)
