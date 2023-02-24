@@ -140,7 +140,7 @@ def simScreen(screen):
     print(nodePositions);
     grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
     print(list(grid.grid))
-    path = grid.generatePath(0, 27)
+    path = grid.generatePath(0, 10)
     
 ############################################
 
@@ -171,7 +171,7 @@ def simScreen(screen):
             pygame.draw.line(screen, BLACK, [0, startY], [WIDTH, startY], 40)
             startY += roadIncrementY
         
-        grid.drawNodes(path, 0, 27)
+        grid.drawNodes(path, 0,10)
         goBack.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
