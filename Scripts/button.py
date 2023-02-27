@@ -16,6 +16,7 @@ class Button:
         self.image = pygame.Surface(size)
         self.image.fill(color)
         self.rect = pygame.Rect((0, 0), size)
+        self.text = text
 
         font = pygame.font.SysFont(None, 32)
         text = font.render(text, True, (0, 0, 0))

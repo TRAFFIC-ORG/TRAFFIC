@@ -44,6 +44,7 @@ class Button(object):
             if event.button == 1:
                 return self.rect.collidepoint(event.pos)
 
+
 # Function for the first screen
 
 
@@ -110,8 +111,14 @@ def simScreen(screen):
     simRunning = True
     clock = pygame.time.Clock()
     builder = Builder(screen)
-    builder.create_grid()
+    # builder.create_grid()
     goBack = Button((5, 25), (120, 40), RED, "Main Menu")
+
+    screen.fill((255, 255, 255))
+    check = 0  # off
+    count = 0
+    intersectionList = list(())
+
     while simRunning:
         # Checking for events
         for event in pygame.event.get():
@@ -119,31 +126,72 @@ def simScreen(screen):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
              # If someone presses go to options
             if goBack.is_clicked(event):
                 mainMenu(screen)
 
-            # Handle button clicks and hover
-            builder.handle_click(event)
-            builder.handle_hover(event)
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                # Handle handle click event
+                for button in builder.buttons:
+                    if button.is_clicked(event) and button.text == "Intersection" and check == 0:
+                        print("Intersection Placement On")
+                        check = 1  # intersection on
+                    elif button.is_clicked(event) and button.text == "Intersection" and check == 1:
+                        print("Intersection Placement Off")
+                        check = 0  # off
+                        pass
+                    elif button.is_clicked(event) and button.text == "Road" and check == 0:
+                        print("Road Placement On")
+                        print("Select First Node")
+                        check = 2  # road on
+                    elif button.is_clicked(event) and button.text == "Road" and check == 2:
+                        print("Road Placement Off")
+                        check = 0  # off
+                        pass
 
-        screen.fill((255, 255, 255))
-        vertRoads = 8
-        horizontalRoads = 6
-        # Draw Screen
-        currentX = 150
-        for i in range(vertRoads):
-            pygame.draw.line(screen, BLACK, [currentX, 0], [
-                             currentX, HEIGHT], 40)
-            currentX += 100
+                    elif button.is_clicked(event) and button.text == "Start":
+                        # Start the simulation
+                        print("Start button clicked")
+                        pass
+                    elif button.is_clicked(event) and button.text == "Pause":
+                        # Stop the simulation
+                        print("Pause button clicked")
+                        pass
+                    elif button.is_clicked(event) and button.text == "End":
+                        # Pause the simulation
+                        print("End button clicked")
+                        pass
+                    elif button.is_clicked(event) and button.text == "List":
+                        # Print List
+                        print(intersectionList)
+                        pass
 
-        currentY = 100
-        for i in range(horizontalRoads):
-            pygame.draw.line(screen, BLACK, [0, currentY], [
-                             WIDTH, currentY], 40)
-            currentY += 100
+            # if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and check == 1:
+            #     # Place an intersection node
+            #     for i, row in enumerate(builder.grid):
+            #         for j, rect in enumerate(row):
+            #             if builder.rect.collidepoint(event.pos):
+            #                 print("Intersection Place ", event.pos)
+            #                 builder.drawNode(event.pos)
+            #                 intersectionList.append(event.pos)
 
-        builder.display_grid()
+            # if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and check == 2:
+            #     # Place a road node
+            #     for i, row in enumerate(builder.grid):
+            #         for j, rect in enumerate(row):
+            #             for rect in builder.grid:
+            #                 if builder.rect.collidepoint(event.pos) and count == 0:
+            #                     point1 = event.pos
+            #                     print("Select Second Node")
+            #                     count = 1
+            #                 elif builder.rect.collidepoint(event.pos) and count == 1:
+            #                     point2 = event.pos
+            #                     builder.drawLine(point1, point2)
+            #                     count = 0
+
+        # pygame.draw.circle(screen, RED, (x, y), 5)
+        # builder.display_grid()
         builder.draw_buttons()
 
         goBack.draw(screen)
