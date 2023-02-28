@@ -11,12 +11,12 @@ RED = (255, 0, 0)
 YELLOW = (0, 0, 255)
 
 
-class Square:
-    def __init__(self, x, y, size):
-        self.x = x
-        self.y = y
-        self.size = size
-        self.rect = pygame.Rect(x, y, size, size)
+# class Square:
+#     def __init__(self, x, y, size):
+#         self.x = x
+#         self.y = y
+#         self.size = size
+#         self.rect = pygame.Rect(x, y, size)
 
 
 class Builder:
@@ -51,17 +51,17 @@ class Builder:
                             (255, 255, 255), "List")
         self.buttons.append(listButton)
 
-    def update(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    # create a new square where the user clicked
-                    x, y = pygame.mouse.get_pos()
-                    new_square = Square(x, y, 50)
-                    self.squares.append(new_square)
+    # def update(self):
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             pygame.quit()
+    #             quit()
+    #         elif event.type == pygame.MOUSEBUTTONDOWN:
+    #             if event.button == 1:
+    #                 # create a new square where the user clicked
+    #                 x, y = pygame.mouse.get_pos()
+    #                 new_square = Square(x, y, 50)
+    #                 self.squares.append(new_square)
 
         self.display_squares()
         self.draw_buttons()
@@ -82,3 +82,40 @@ class Builder:
         for row in self.grid:
             for square in row:
                 pygame.draw.rect(self.screen, (200, 200, 200), square, 1)
+
+    # def drawNode(self, pos):
+    #     # create a Rect object at the specified position
+    #     node_square = pygame.Rect(pos[0], pos[1], 15, 15)
+    #     # append the new node to the list
+    #     self.squares.append(node_square)
+    #     # draw the node on the screen
+    #     pygame.draw.rect(self.screen, RED, node_square)
+    #     # pygame.draw.rect(self.screen, RED, (x, y, 15, 15))
+
+    def drawNode(self, pos, is_intersection):
+        if is_intersection:
+            node_type = "Intersection"
+        else:
+            node_type = "Road"
+
+        # create a Rect object at the specified position
+        node_square = pygame.Rect(pos[0], pos[1], 15, 15)
+        # append the new node to the list
+        self.squares.append((node_square, node_type, RED))
+        # draw the node on the screen
+        for square, type, color in self.squares:
+            pygame.draw.rect(self.screen, color, square)
+
+        # check if a node square has been clicked and toggle its color
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_clicked = pygame.mouse.get_pressed()[0]
+        for i, (square, type, color) in enumerate(self.squares):
+            if square.collidepoint(mouse_pos) and mouse_clicked:
+                if color == RED:
+                    self.squares[i] = (square, type, YELLOW)
+                else:
+                    self.squares[i] = (square, type, RED)
+                break
+
+    def drawLine(self, firstNode, secondNode):
+        pygame.draw.line(self.screen, (255, 0, 0), firstNode, secondNode)

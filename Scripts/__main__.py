@@ -1,5 +1,6 @@
 import pygame
 from builderGUI import Builder
+# from builderGUI import Square
 
 # constants
 # ---------
@@ -10,6 +11,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+YELLOW = (0, 0, 255)
 
 # class
 # ----------
@@ -167,28 +169,50 @@ def simScreen(screen):
                         print(intersectionList)
                         pass
 
-            # if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and check == 1:
-            #     # Place an intersection node
-            #     for i, row in enumerate(builder.grid):
-            #         for j, rect in enumerate(row):
-            #             if builder.rect.collidepoint(event.pos):
-            #                 print("Intersection Place ", event.pos)
-            #                 builder.drawNode(event.pos)
-            #                 intersectionList.append(event.pos)
+            # Draw Intersection Nodes
+            if event.type == pygame.MOUSEBUTTONDOWN and check == 1 and event.pos[1] < 650:
+                print("Intersection Place ", event.pos)
+                builder.drawNode(event.pos, is_intersection=True)
+                intersectionList.append(event.pos)
 
-            # if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and check == 2:
-            #     # Place a road node
-            #     for i, row in enumerate(builder.grid):
-            #         for j, rect in enumerate(row):
-            #             for rect in builder.grid:
-            #                 if builder.rect.collidepoint(event.pos) and count == 0:
-            #                     point1 = event.pos
-            #                     print("Select Second Node")
-            #                     count = 1
-            #                 elif builder.rect.collidepoint(event.pos) and count == 1:
-            #                     point2 = event.pos
-            #                     builder.drawLine(point1, point2)
-            #                     count = 0
+            # Place a road node
+            if event.type == pygame.MOUSEBUTTONDOWN and check == 2:
+                for square, type, color in builder.squares:
+                    # Check if an intersection node square has been clicked and turn it yellow
+                    if square.collidepoint(event.pos) and type == "Intersection" and color == RED:
+                        builder.drawNode(square.topleft, is_intersection=True)
+                        break
+                    # Place a road node
+                    elif square.collidepoint(event.pos) and type == "Intersection" and color == YELLOW:
+                        if count == 0:
+                            point1 = square.center
+                            print("Select Second Node")
+                            count = 1
+                        elif count == 1:
+                            point2 = square.center
+                            builder.drawLine(point1, point2)
+                            count = 0
+                        break
+
+            # # Draw Intersection Nodes
+            # if event.type == pygame.MOUSEBUTTONDOWN and check == 1:
+            #     print("Intersection Place ", event.pos)
+            #     builder.drawNode(event.pos)
+            #     intersectionList.append(event.pos)
+
+            # if event.type == pygame.MOUSEBUTTONDOWN and check == 2:
+            #     pass
+            #     # builder.roads()
+            #     # for squares in builder.squares:
+            #     #     # Place a road node
+            #     #     if pygame.Rect.collidepoint(event.pos[0], event.pos[1]) and count == 0:
+            #     #         point1 = event.pos
+            #     #         print("Select Second Node")
+            #     #         count = 1
+            #     #     elif pygame.Rect.collidepoint(event.pos[0], event.pos[1]) and count == 1:
+            #     #         point2 = event.pos
+            #     #         builder.drawLine(point1, point2)
+            #     #         count = 0
 
         # pygame.draw.circle(screen, RED, (x, y), 5)
         # builder.display_grid()
