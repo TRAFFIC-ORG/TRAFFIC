@@ -79,7 +79,7 @@ def mainMenu(screen):
             # If someone presses the go to sim button
             if goToSim.is_clicked(event):
                 # go to simScreen
-                builderScreen(screen)
+                buttonScreen(screen)
 
             # If someone presses go to options
             if goToOptions.is_clicked(event):
@@ -109,7 +109,7 @@ def mainMenu(screen):
 # Function for the Sim Screen
 
 
-def builderScreen(screen):
+def buttonScreen(screen):
     simRunning = True
     clock = pygame.time.Clock()
     builder = Builder(screen)
