@@ -19,3 +19,4 @@ class Perceptron:
         else:
             output=0
         print(output)
+        print("test")
