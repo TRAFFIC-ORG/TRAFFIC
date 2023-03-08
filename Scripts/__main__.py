@@ -1,4 +1,5 @@
 import pygame
+import random
 from perceptron import Perceptron
 from builderGUI import Builder
 from TrafficLights import *
@@ -25,7 +26,7 @@ class Button(object):
         self.image = pygame.Surface(size)
         self.image.fill(color)
         self.rect = pygame.Rect((0,0), size)
-
+        
         font = pygame.font.SysFont(None, 32)
         text = font.render(text, True, (0,0,0))
         text_rect = text.get_rect()
@@ -145,7 +146,7 @@ def simScreen(screen):
     print(nodePositions);
     grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
     print(list(grid.grid))
-    path = grid.generatePath(0, 10)
+    path = grid.generatePath(0, 37)
     
 ############################################
 
@@ -176,7 +177,12 @@ def simScreen(screen):
             pygame.draw.line(screen, BLACK, [0, startY], [WIDTH, startY], 40)
             startY += roadIncrementY
         
-        grid.drawNodes(path, 0,10)
+        grid.drawNodes(path, 0,37)
+        perceptron= Perceptron(1)
+        for i in range(len(grid.getNodes())):
+            #array = [perceptron.createSum(random.uniform(1,10)),0]
+            carsWaiting= random.uniform(1,10)
+            grid.lightState(i,perceptron.createSum([carsWaiting,0]))
         goBack.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)

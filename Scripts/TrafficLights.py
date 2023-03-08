@@ -87,3 +87,18 @@ class TrafficLights(object):
                 pg.draw.circle(self.screen, GREEN, pos, 10)
             else:
                 pg.draw.circle(self.screen, RED, pos, 10)
+    def lightState(self, node, north):
+        pos = self.nodePositions[node]
+        if north == 1:
+            #Set the north and south lights to green
+            #North and South
+            pg.draw.line(self.screen, GREEN, (pos[0]-15, pos[1]-19),(pos[0]+15, pos[1]-19), 5)
+            pg.draw.line(self.screen, GREEN, (pos[0]-15, pos[1]+19),(pos[0]+15, pos[1]+19), 5)
+            pg.draw.line(self.screen, RED, (pos[0]-19, pos[1]-15),(pos[0]-19, pos[1]+15), 5)
+            pg.draw.line(self.screen, RED, (pos[0]+19, pos[1]-15),(pos[0]+19, pos[1]+15), 5)
+        else:
+            #Set the west and east lights to green
+            pg.draw.line(self.screen, RED, (pos[0]-15, pos[1]-19),(pos[0]+15, pos[1]-19), 5)
+            pg.draw.line(self.screen, RED, (pos[0]-15, pos[1]+19),(pos[0]+15, pos[1]+19), 5)
+            pg.draw.line(self.screen, GREEN, (pos[0]-19, pos[1]-15),(pos[0]-19, pos[1]+15), 5)
+            pg.draw.line(self.screen, GREEN, (pos[0]+19, pos[1]-15),(pos[0]+19, pos[1]+15), 5)
