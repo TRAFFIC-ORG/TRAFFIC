@@ -3,6 +3,8 @@ import random
 from perceptron import Perceptron
 from builderGUI import Builder
 from TrafficLights import *
+from Car import Car
+from Road import Road
 import math
 #constants
 #---------
@@ -167,23 +169,27 @@ def simScreen(screen):
         screen.fill((255,255,255))   
 
         #Draw Screen
-        startX = 150
-        startY = 100
+        startX = 130
+        startY = 80
+        road= Road(screen)
         for i in range(vertRoads):
-            pygame.draw.line(screen, BLACK, [startX, 0], [startX, HEIGHT], 40)
+            road.drawSelf(startX, 0, True)
             startX += roadIncrementX
 
         for i in range(horzRoads):
-            pygame.draw.line(screen, BLACK, [0, startY], [WIDTH, startY], 40)
+            road.drawSelf(0, startY, False)
             startY += roadIncrementY
         
         grid.drawNodes(path, 0,37)
-        perceptron= Perceptron(1)
+        
         for i in range(len(grid.getNodes())):
             #array = [perceptron.createSum(random.uniform(1,10)),0]
             carsWaiting= random.uniform(1,10)
-            grid.lightState(i,perceptron.createSum([carsWaiting,0]))
+            carsWaiting2= random.uniform(1,10)
+            grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
         goBack.draw(screen)
+        car = Car()
+        car.drawSelf(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -425,6 +431,7 @@ def saveLoadScreen(screen):
 pygame.init()
 #Create the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+perceptron= Perceptron(2)
 #Start the sim
 mainMenu(screen)
 #End the sim
