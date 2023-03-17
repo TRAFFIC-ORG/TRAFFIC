@@ -158,10 +158,24 @@ def simScreen(screen):
                      vertical][((horizontal+1)*horzRoads)+vertical] = 1
     print(nodeDict)
 
+    i = 0
+    # horizonally connecting the roads
+    for horizonal in range(horzRoads):
+        for vertical in range(vertRoads-1):
+            nodeDict[vertical+(horizonal*vertRoads)
+                     ][vertical+1+(horizonal*vertRoads)] = 1
+
+    for vertical in range(vertRoads):
+        for horizontal in range(horzRoads-1):
+            nodeDict[(horizontal*horzRoads) +
+                     vertical][((horizontal+1)*horzRoads)+vertical] = 1
+    print(nodeDict)
+
     print(nodePositions)
     grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
     print(list(grid.grid))
     path = grid.generatePath(0, 37)
+
 
 ############################################
 
@@ -275,7 +289,66 @@ def mapBuilder(screen):
                     elif button.is_clicked(event) and button.text == "Start":
                         # Start the simulation
                         print("Start button clicked")
-                        pass
+                        nodeDict = {}
+                        nodePositions = {}
+                        nodes = []
+
+                        for i in range(len(intersectionList)):
+                            nodes.append(i)
+
+                        i = 0
+                        # connect the nodes in the lines
+                        # create a mapping from (x, y) tuple to node index
+                        node_index = {}
+                        for i, intersection in enumerate(intersectionList):
+                            rounded_intersection = tuple(
+                                map(round, intersection))
+                            node_index[rounded_intersection] = i
+
+                        # create nodes list and nodeDict dictionary
+                        nodes = list(range(len(intersectionList)))
+                        nodeDict = {i: {} for i in nodes}
+                        nodePositions = {i: tuple(
+                            map(round, intersection)) for i, intersection in enumerate(intersectionList)}
+
+                        # connect the nodes in the lines
+                        for line in builder.lines:
+                            rounded_line = (
+                                tuple(map(round, line[0])), tuple(map(round, line[1])))
+                            if rounded_line[0] not in node_index or rounded_line[1] not in node_index:
+                                continue
+                            node1 = node_index[rounded_line[0]]
+                            node2 = node_index[rounded_line[1]]
+                            nodeDict[node1][node2] = 1
+                            nodeDict[node2][node1] = 1
+
+                            print(f"Connected nodes: {node1} and {node2}")
+
+                        print("Intersection list:", intersectionList)
+                        intersectionList = [tuple(
+                            map(round, intersection)) for intersection in intersectionList]  # Add this line
+                        # You can add this line to check the updated intersectionList
+                        print("Rounded Intersection list:", intersectionList)
+
+                        print(nodeDict)
+                        print(nodePositions)
+                        print("End node index:", len(intersectionList) - 1)
+                        grid = TrafficLights(
+                            nodes, nodeDict, screen, nodePositions)
+
+                        # Add edges to the graph
+                        for i, intersection1 in enumerate(intersectionList):
+                            for j, intersection2 in enumerate(intersectionList):
+                                if i != j:
+                                    distance = math.sqrt(
+                                        (intersection1[0] - intersection2[0])**2 + (intersection1[1] - intersection2[1])**2)
+                                    grid.addEdge(i, j, distance)
+
+                        print("Grid nodeDict:", nodeDict)
+                        print(list(grid.grid))
+                        path = grid.generatePath(0, len(intersectionList) - 1)
+
+                        # pass
                     elif button.is_clicked(event) and button.text == "Pause":
                         # Stop the simulation
                         print("Pause button clicked")
@@ -286,7 +359,7 @@ def mapBuilder(screen):
                         pass
                     elif button.is_clicked(event) and button.text == "List":
                         # Print List
-                        print(intersectionList)
+                        print("intersectionList: ", intersectionList)
                         pass
 
                     elif button.is_clicked(event) and button.text == "Save":
