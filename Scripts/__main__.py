@@ -222,6 +222,25 @@ def mapBuilder(screen):
     save_count = 0
     save_name_prefix = "map"
 
+    # Load the Road.png sprite
+    road_sprite = pygame.image.load("Road.png")
+
+    # New function to draw road sprite between two points
+    def draw_road_sprite(node1, node2):
+        dx, dy = node2[0] - node1[0], node2[1] - node1[1]
+        angle = math.degrees(math.atan2(dy, dx))
+        distance = math.sqrt(dx * dx + dy * dy)
+
+        # Change the second value in the tuple to adjust the road's width
+        road_sprite_scaled = pygame.transform.scale(
+            road_sprite, (int(distance), 20))
+        road_sprite_rotated = pygame.transform.rotate(
+            road_sprite_scaled, -angle)
+
+        sprite_rect = road_sprite_rotated.get_rect(
+            center=((node1[0] + node2[0]) / 2, (node1[1] + node2[1]) / 2))
+        screen.blit(road_sprite_rotated, sprite_rect.topleft)
+
     while simRunning:
         # Checking for events
         for event in pygame.event.get():
@@ -298,13 +317,14 @@ def mapBuilder(screen):
                             intersectionList = data["intersectionList"]
                             builder.squares = data["squares"]
                             builder.lines = data["lines"]
+
                             # Redraw the loaded map
                             screen.fill((255, 255, 255))
                             for square, type, color in builder.squares:
                                 pygame.draw.rect(screen, color, square)
                             for line in builder.lines:
-                                pygame.draw.line(
-                                    screen, BLACK, line[0], line[1], 2)
+                                # Replace the line drawing with the draw_road_sprite function
+                                draw_road_sprite(line[0], line[1])
                             print(f"Loaded {save_to_load}")
                         except FileNotFoundError:
                             print("Map does not exist")

@@ -1,4 +1,5 @@
 import pygame
+import math
 from button import Button
 
 WIDTH = 1000
@@ -17,6 +18,7 @@ class Builder:
         self.buttons = []
         self.squares = []
         self.lines = []
+        self.road_sprite = pygame.image.load("Road.png").convert_alpha()
 
         # add intersection button to the list of buttons
         intersectionButton = Button(
@@ -79,15 +81,6 @@ class Builder:
             for square in row:
                 pygame.draw.rect(self.screen, (200, 200, 200), square, 1)
 
-    # def drawNode(self, pos):
-    #     # create a Rect object at the specified position
-    #     node_square = pygame.Rect(pos[0], pos[1], 15, 15)
-    #     # append the new node to the list
-    #     self.squares.append(node_square)
-    #     # draw the node on the screen
-    #     pygame.draw.rect(self.screen, RED, node_square)
-    #     # pygame.draw.rect(self.screen, RED, (x, y, 15, 15))
-
     def drawNode(self, pos, is_intersection):
         if is_intersection:
             node_type = "Intersection"
@@ -116,3 +109,18 @@ class Builder:
     def drawLine(self, node1, node2):
         pygame.draw.line(self.screen, (255, 0, 0), node1, node2)
         self.lines.append((node1, node2))
+
+        dx = node2[0] - node1[0]
+        dy = node2[1] - node1[1]
+        angle = math.degrees(math.atan2(dy, dx))
+        distance = math.sqrt(dx * dx + dy * dy)
+
+        # Change the second value in the tuple to adjust the road's width
+        road_sprite_scaled = pygame.transform.scale(
+            self.road_sprite, (int(distance), 20))
+        road_sprite_rotated = pygame.transform.rotate(
+            road_sprite_scaled, -angle)
+
+        sprite_rect = road_sprite_rotated.get_rect(
+            center=((node1[0] + node2[0]) / 2, (node1[1] + node2[1]) / 2))
+        self.screen.blit(road_sprite_rotated, sprite_rect.topleft)
