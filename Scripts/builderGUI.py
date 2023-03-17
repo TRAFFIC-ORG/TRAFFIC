@@ -11,19 +11,12 @@ RED = (255, 0, 0)
 YELLOW = (0, 0, 255)
 
 
-# class Square:
-#     def __init__(self, x, y, size):
-#         self.x = x
-#         self.y = y
-#         self.size = size
-#         self.rect = pygame.Rect(x, y, size)
-
-
 class Builder:
     def __init__(self, screen):
         self.screen = screen
         self.buttons = []
         self.squares = []
+        self.lines = []
 
         # add intersection button to the list of buttons
         intersectionButton = Button(
@@ -51,17 +44,20 @@ class Builder:
                             (255, 255, 255), "List")
         self.buttons.append(listButton)
 
-    # def update(self):
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             pygame.quit()
-    #             quit()
-    #         elif event.type == pygame.MOUSEBUTTONDOWN:
-    #             if event.button == 1:
-    #                 # create a new square where the user clicked
-    #                 x, y = pygame.mouse.get_pos()
-    #                 new_square = Square(x, y, 50)
-    #                 self.squares.append(new_square)
+        # add map save button
+        mapSaveButton = Button((700, 650), (100, 50),
+                               (255, 255, 255), "Save")
+        self.buttons.append(mapSaveButton)
+
+        # add map load button
+        mapLoadButton = Button((800, 650), (100, 50),
+                               (255, 255, 255), "Load")
+        self.buttons.append(mapLoadButton)
+
+        # # add intersection removal button
+        # removeButton = Button((600, 650), (100, 50),
+        #                       (255, 255, 255), "Remove")
+        # self.buttons.append(removeButton)
 
         self.display_squares()
         self.draw_buttons()
@@ -117,5 +113,6 @@ class Builder:
                     self.squares[i] = (square, type, RED)
                 break
 
-    def drawLine(self, firstNode, secondNode):
-        pygame.draw.line(self.screen, (255, 0, 0), firstNode, secondNode)
+    def drawLine(self, node1, node2):
+        pygame.draw.line(self.screen, (255, 0, 0), node1, node2)
+        self.lines.append((node1, node2))
