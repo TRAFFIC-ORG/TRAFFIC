@@ -38,6 +38,7 @@ class TrafficLights(object):
                 connectingNodes.append(outGoingNode)
         return connectingNodes
     
+    #Returns the value of the edge between two nodes
     def getValues(self, node1, node2):
         return self.grid[node1][node2]
 
@@ -85,8 +86,6 @@ class TrafficLights(object):
                 pg.draw.circle(self.screen, BLUE, pos, 10)
             elif node in path:
                 pg.draw.circle(self.screen, GREEN, pos, 10)
-            else:
-                pg.draw.circle(self.screen, RED, pos, 10)
     def lightState(self, node, north):
         pos = self.nodePositions[node]
         if north == 1:

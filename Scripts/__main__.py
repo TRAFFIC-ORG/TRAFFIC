@@ -111,6 +111,7 @@ def mainMenu(screen):
 def simScreen(screen):
 ##############################################
 
+    #params
     vertRoads = 8
     horzRoads = 8
     startX = 150
@@ -139,17 +140,25 @@ def simScreen(screen):
     for horizonal in range(horzRoads):
         for vertical in range(vertRoads-1):
             nodeDict[vertical+(horizonal*vertRoads)][vertical+1+(horizonal*vertRoads)] = 1
-           
+    #horizonally connecting the roads       
     for vertical in range(vertRoads):
         for horizontal in range(horzRoads-1):
             nodeDict[(horizontal*horzRoads)+vertical][((horizontal+1)*horzRoads)+vertical] = 1
+    print("node dict")
     print(nodeDict)
 
-    print(nodePositions);
+    #Generate a grid with the nodes and the traffic lights
     grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
+    print("Grid.grid")
     print(list(grid.grid))
-    path = grid.generatePath(0, 37)
+    print("Node Positions")
+    print(grid.nodePositions)
     
+    path = grid.generatePath(0, 37)
+    print("path")
+    print(path)
+
+    car = Car(grid.nodePositions, 0)
 ############################################
 
     simRunning = True
@@ -180,16 +189,19 @@ def simScreen(screen):
             road.drawSelf(0, startY, False)
             startY += roadIncrementY
         
+        #Draw the path for the car
         grid.drawNodes(path, 0,37)
         
+        car.moveCar(path)
         for i in range(len(grid.getNodes())):
             #array = [perceptron.createSum(random.uniform(1,10)),0]
             carsWaiting= random.uniform(1,10)
             carsWaiting2= random.uniform(1,10)
             grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
+
+        #Draw the elements on the screen
         goBack.draw(screen)
-        car = Car()
-        car.drawSelf(screen)
+        car.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
