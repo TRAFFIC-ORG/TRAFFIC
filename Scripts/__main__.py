@@ -20,7 +20,6 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 YELLOW = (0, 0, 255)
-
 # class
 # ----------
 
@@ -101,7 +100,7 @@ def mainMenu(screen):
             # If someone presses the exit button
             if exitButton.is_clicked(event):
                 # exit
-                pygame.quit()
+                pygame.quit();
                 exit()
 
         # Draw all of the buttons on the screen
@@ -183,6 +182,9 @@ def simScreen(screen):
     print(path)
 
     car = Car(grid.nodePositions, 0)
+    #Debug Lights
+    currentState = 1
+    switched = False
 ############################################
 
     simRunning = True
@@ -221,7 +223,15 @@ def simScreen(screen):
             #array = [perceptron.createSum(random.uniform(1,10)),0]
             carsWaiting= random.uniform(1,10)
             carsWaiting2= random.uniform(1,10)
-            grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
+            #This is the code to change if you want debug or not
+            #grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
+            print(pygame.time.get_ticks() % 5000)
+            if(pygame.time.get_ticks() % 5000 >= 4976 and switched == False):
+                currentState *= -1
+                switched = True
+            if(pygame.time.get_ticks() % 5000 < 100):
+                switched = False
+            grid.lightState(i,currentState)
 
         #Draw the elements on the screen
         goBack.draw(screen)
