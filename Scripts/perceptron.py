@@ -1,10 +1,14 @@
 import random
 class Perceptron:
     def __init__(self, numberOfWeights):
-        self.weights = [0] * numberOfWeights
+        self.weights= []
+        
+        for i in range(numberOfWeights):
+            self.weights.append(0)
         self.numberOfWeights = numberOfWeights
         for i in range(numberOfWeights):
             self.weights[i] = random.uniform(-1.1,1.1)
+        print("weights:")
         print(self.weights)
     
     #Length of inputs must be the same as weights
@@ -18,4 +22,5 @@ class Perceptron:
             output = 1
         else:
             output=0
-        print(output)
+        return output
+        
