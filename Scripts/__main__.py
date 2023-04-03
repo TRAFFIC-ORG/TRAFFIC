@@ -223,7 +223,7 @@ def simScreen(screen):
         #Draw the path for the car
         grid.drawNodes(path, 0,37)
         
-        car.moveCar(path)
+        car.moveCar()
         for i in range(len(grid.getNodes())):
             carsWaitingEast= random.uniform(1,10)
             carsWaitingWest= random.uniform(1,10)
