@@ -1,5 +1,7 @@
 import pygame
 import random
+from Sim import Sim
+from Trainer import Trainer
 from perceptron import Perceptron
 from builderGUI import Builder
 from TrafficLights import *
@@ -185,6 +187,9 @@ def simScreen(screen):
     #Debug Lights
     currentState = 1
     switched = False
+
+    trainer = Trainer()
+    currentSim = trainer.getCurrentSim()
 ############################################
 
     simRunning = True
@@ -220,19 +225,22 @@ def simScreen(screen):
         
         car.moveCar(path)
         for i in range(len(grid.getNodes())):
-            #array = [perceptron.createSum(random.uniform(1,10)),0]
-            carsWaiting= random.uniform(1,10)
-            carsWaiting2= random.uniform(1,10)
+            carsWaitingEast= random.uniform(1,10)
+            carsWaitingWest= random.uniform(1,10)
+            carsWaitingNorth= random.uniform(1,10)
+            carsWaitingSouth= random.uniform(1,10)
             #This is the code to change if you want debug or not
             #grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
-            print(pygame.time.get_ticks() % 5000)
-            if(pygame.time.get_ticks() % 5000 >= 4976 and switched == False):
-                currentState *= -1
-                switched = True
-            if(pygame.time.get_ticks() % 5000 < 100):
-                switched = False
-            grid.lightState(i,currentState)
-
+            # if(pygame.time.get_ticks() % 5000 >= 4976 and switched == False):
+            #     currentState *= -1
+            #     switched = True
+            # if(pygame.time.get_ticks() % 5000 < 100):
+            #     switched = False
+            grid.lightState(i,currentSim.getLightState([carsWaitingEast,carsWaitingWest,carsWaitingSouth,carsWaitingNorth]))
+        #Current Sim Code
+        if(trainer.shouldSwitch()):
+            trainer.switchSim()
+            currentSim = trainer.getCurrentSim()
         #Draw the elements on the screen
         goBack.draw(screen)
         car.draw(screen)
@@ -597,7 +605,6 @@ def saveLoadScreen(screen, builder):
 pygame.init()
 # Create the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-perceptron = Perceptron(2)
 # Start the sim
 mainMenu(screen)
 # End the sim
