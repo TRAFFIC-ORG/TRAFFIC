@@ -182,7 +182,7 @@ def simScreen(screen):
     print("path")
     print(path)
 
-    car = Car(grid.nodePositions, 0)
+    car = Car(grid.nodePositions, 0, path)
 ############################################
 
     simRunning = True
@@ -216,7 +216,7 @@ def simScreen(screen):
         #Draw the path for the car
         grid.drawNodes(path, 0,37)
         
-        car.moveCar(path)
+        car.moveCar()
         for i in range(len(grid.getNodes())):
             #array = [perceptron.createSum(random.uniform(1,10)),0]
             carsWaiting= random.uniform(1,10)

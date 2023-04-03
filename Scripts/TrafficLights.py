@@ -1,5 +1,6 @@
 import sys
 import pygame as pg
+import queue
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -9,18 +10,22 @@ BLUE = (0, 0, 255)
 
 
 class TrafficLights(object):
+    #Initilization function
     def __init__(self, nodes, initGrid, screen, nodePositions):
-        self.nodes = nodes
-        self.grid = self.constructGrid(nodes, initGrid)
-        self.screen = screen
-        self.nodePositions = nodePositions
+        self.nodes = nodes #list of nodes that exist in the simulations
+        self.grid = self.constructGrid(nodes, initGrid) #Grid is a collection of all the nodes formed into a grid
+        self.screen = screen #Screen that is defined in main 
+        self.nodePositions = nodePositions #List of the node positions
+        self.que = queue.Queue() #A queue object that will exist on each traffic light
 
     # This function creates the grid from the list of nodes
     def constructGrid(self, nodes, initGrid):
+        #Add all of the nodes to the grid list
         grid = {}
         for node in nodes:
             grid[node] = {}
 
+        
         grid.update(initGrid)
         # This loop ensures that for all nodes A->B with a value V, B->A has the same value V
         for node, edges in grid.items():
@@ -28,8 +33,8 @@ class TrafficLights(object):
                 if grid[touchingNode].get(node, False) == False:
                     grid[touchingNode][node] = value
         return grid
-    # Gets the nodes on the grid
 
+    
     def getNodes(self):
         return self.nodes
 
@@ -99,6 +104,7 @@ class TrafficLights(object):
                 pg.draw.circle(self.screen, BLUE, pos, 10)
             elif node in path:
                 pg.draw.circle(self.screen, GREEN, pos, 10)
+
     def lightState(self, node, north):
         pos = self.nodePositions[node]
         if north == 1:
@@ -132,3 +138,14 @@ class TrafficLights(object):
             self.grid[node2] = {}
         self.grid[node1][node2] = weight
         self.grid[node2][node1] = weight
+
+    #Function to add a car to the queue 
+    def addToQue(self, car):
+        q.put(car)
+
+    #Function to remove a car from the queue
+    def removeFromQue(self, car):
+        q.get()
+
+    def printQue(self):
+        print(q)
