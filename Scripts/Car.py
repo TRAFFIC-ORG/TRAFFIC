@@ -21,7 +21,7 @@ class Car(object):
     def leftQue(self):
         self.inQue = False
     def joinedQue(self):
-        self.inQue = False
+        self.inQue = True
     def flagger(self):
         if self.inQue:
             self.timeInQue += 0.016
