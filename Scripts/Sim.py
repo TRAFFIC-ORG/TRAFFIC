@@ -11,7 +11,8 @@ class Sim(object):
     def carControl(self):
         for i in range(len(self.cars)):
             #Whatever cars need
-            print(self.cars[i])
+            self.cars[i].update()
+            self.points += self.cars[i].getPoints()
     #Call Brain for certain Light
     def getLightState(self, inputs):
         return self.brain.chooseState(inputs)
