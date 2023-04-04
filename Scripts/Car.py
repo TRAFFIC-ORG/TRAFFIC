@@ -1,7 +1,6 @@
 import pygame
 class Car(object):
     def __init__(self, nodePositions, startingNode, path):
-    def __init__(self, nodePositions, startingNode, path):
         self.carImg = pygame.image.load('Car.png')
         self.carImg = pygame.transform.scale(self.carImg, (25, 15))
         self.speed = 5
@@ -14,7 +13,6 @@ class Car(object):
         self.pos = self.nodePositions[startingNode]
         self.posX = self.pos[0]
         self.posY = self.pos[1]
-<<<<<<< HEAD
         self.inQue = False
         self.timeInQue = 0
     def drawSelf(self,screen):
@@ -26,7 +24,6 @@ class Car(object):
         self.posX = self.nodePositions[self.path[1]]
         self.posY = self.nodePositions[self.path[1]]
 
->>>>>>> e4d6c48 (Started working on the light controls)
     def draw(self, surface):
         surface.blit(self.carImg, (self.posX, self.posY))
 
