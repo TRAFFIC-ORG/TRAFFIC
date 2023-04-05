@@ -183,7 +183,7 @@ def simScreen(screen):
     print("path")
     print(path)
 
-    car = Car(grid.nodePositions, 0)
+    car = Car(grid.nodePositions, 0, path)
     #Debug Lights
     currentState = 1
     switched = False

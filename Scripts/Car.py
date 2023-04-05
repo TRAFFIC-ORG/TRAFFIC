@@ -6,18 +6,20 @@ class Car(object):
         self.speed = 5
         self.startingNode = startingNode
         self.nodePositions = nodePositions
-        print("Node positions in car" )
+        print("Node positions in car")
         print(self.nodePositions)
-        print("Node positions in car" )
+        print("Node positions in car")
         print(self.nodePositions)
         self.pos = self.nodePositions[startingNode]
         self.posX = self.pos[0]
         self.posY = self.pos[1]
         self.inQue = False
         self.timeInQue = 0
+
     def drawSelf(self,screen):
         screen.blit(self.carImg, (0,0))
-    #function to move the car along the path that is passed to the car
+    # function to move the car along the path that is passed to the car
+
     def moveCar(self ):
         print(self.path)
         print(self.nodePositions[self.path[1]])

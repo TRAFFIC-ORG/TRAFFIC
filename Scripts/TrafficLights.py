@@ -34,7 +34,6 @@ class TrafficLights(object):
                     grid[touchingNode][node] = value
         return grid
 
-    
     def getNodes(self):
         return self.nodes
 
@@ -45,8 +44,8 @@ class TrafficLights(object):
             if self.grid[node].get(outGoingNode, False) != False:
                 connectingNodes.append(outGoingNode)
         return connectingNodes
-    
-    #Returns the value of the edge between two nodes
+    # Returns the value of the edge between two nodes
+
     def getValues(self, node1, node2):
         return self.grid[node1][node2]
 
@@ -141,11 +140,11 @@ class TrafficLights(object):
 
     #Function to add a car to the queue 
     def addToQue(self, car):
-        q.put(car)
+        queue.put(car)
 
     #Function to remove a car from the queue
     def removeFromQue(self, car):
-        q.get()
+        queue.get()
 
     def printQue(self):
-        print(q)
+        print(queue)
