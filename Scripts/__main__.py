@@ -8,6 +8,7 @@ from TrafficLights import *
 from Car import Car
 from Road import Road
 import math
+import textwrap
 
 import pickle
 import os
@@ -24,6 +25,49 @@ RED = (255, 0, 0)
 YELLOW = (0, 0, 255)
 # class
 # ----------
+
+# Add this class at the beginning of your script
+
+
+class LogBox:
+    def __init__(self, screen, x, y, width, height, font_size=20, max_lines=10):
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.font_size = font_size
+        self.max_lines = max_lines
+        self.font = pygame.font.Font(None, font_size)
+        self.messages = []
+
+    def add_message(self, message):
+        # Split the message if it's too long
+        wrapped_message = textwrap.fill(message, 20)
+        wrapped_lines = wrapped_message.splitlines()
+
+        # Append the wrapped lines to the messages list
+        for line in wrapped_lines:
+            self.messages.append(line)
+
+        # Remove the oldest message if the list exceeds the maximum number of lines
+        while len(self.messages) > self.max_lines:
+            self.messages.pop(0)
+
+    def draw(self):
+        # Clear the log box area
+        log_box_bg_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(self.screen, (255, 255, 255), log_box_bg_rect)
+
+        # Draw the log box
+        log_box_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(self.screen, (200, 200, 200), log_box_rect, 2)
+
+        # Draw the log messages
+        for i, message in enumerate(self.messages):
+            text_surface = self.font.render(message, True, (0, 0, 0))
+            text_position = (self.x + 5, self.y + i * self.font_size)
+            self.screen.blit(text_surface, text_position)
 
 
 class Button(object):
@@ -123,7 +167,7 @@ def mainMenu(screen):
 def simScreen(screen):
     ##############################################
 
-    #params
+    # params
     vertRoads = 8
     horzRoads = 8
     startX = 150
@@ -164,21 +208,23 @@ def simScreen(screen):
     # horizonally connecting the roads
     for horizonal in range(horzRoads):
         for vertical in range(vertRoads-1):
-            nodeDict[vertical+(horizonal*vertRoads)][vertical+1+(horizonal*vertRoads)] = 1
-    #horizonally connecting the roads       
+            nodeDict[vertical+(horizonal*vertRoads)
+                     ][vertical+1+(horizonal*vertRoads)] = 1
+    # horizonally connecting the roads
     for vertical in range(vertRoads):
         for horizontal in range(horzRoads-1):
-            nodeDict[(horizontal*horzRoads)+vertical][((horizontal+1)*horzRoads)+vertical] = 1
+            nodeDict[(horizontal*horzRoads) +
+                     vertical][((horizontal+1)*horzRoads)+vertical] = 1
     print("node dict")
     print(nodeDict)
 
-    #Generate a grid with the nodes and the traffic lights
+    # Generate a grid with the nodes and the traffic lights
     grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
     print("Grid.grid")
     print(list(grid.grid))
     print("Node Positions")
     print(grid.nodePositions)
-    
+
     path = grid.generatePath(0, 37)
     print("path")
     print(path)
@@ -255,6 +301,9 @@ def mapBuilder(screen):
     # builder.create_grid()
     goBack = Button((5, 25), (120, 40), RED, "Main Menu")
 
+    log_box = LogBox(screen, screen.get_width() -
+                     200, 10, 190, screen.get_height()-500)
+
     screen.fill((255, 255, 255))
     check = 0  # off
     count = 0
@@ -298,23 +347,36 @@ def mapBuilder(screen):
                 for button in builder.buttons:
                     if button.is_clicked(event) and button.text == "Intersection" and check == 0:
                         print("Intersection Placement On")
+                        log_box.add_message("Intersection Placement On")
+                        # Pass log_lines as an argument
                         check = 1  # intersection on
                     elif button.is_clicked(event) and button.text == "Intersection" and check == 1:
                         print("Intersection Placement Off")
+                        log_box.add_message("Intersection Placement Off")
                         check = 0  # off
                         pass
                     elif button.is_clicked(event) and button.text == "Road" and check == 0:
                         print("Road Placement On")
+                        log_box.add_message("Road Placement On")
                         print("Select First Node")
+                        log_box.add_message("Select First Node")
                         check = 2  # road on
                     elif button.is_clicked(event) and button.text == "Road" and check == 2:
                         print("Road Placement Off")
+                        log_box.add_message("Road Placement Off")
                         check = 0  # off
                         pass
 
                     elif button.is_clicked(event) and button.text == "Start":
+                        # Check for placed nodes
+                        if not intersectionList:
+                            print("Nothing to Start")
+                            log_box.add_message("Nothing to Start")
+                            continue
+
                         # Start the simulation
                         print("Start button clicked")
+                        log_box.add_message("Start button clicked")
                         nodeDict = {}
                         nodePositions = {}
                         nodes = []
@@ -378,13 +440,18 @@ def mapBuilder(screen):
                     elif button.is_clicked(event) and button.text == "Pause":
                         # Stop the simulation
                         print("Pause button clicked")
+                        log_box.add_message("Pause button clicked")
                         pass
                     elif button.is_clicked(event) and button.text == "End":
                         # Pause the simulation
                         print("End button clicked")
+                        log_box.add_message("End button clicked")
                         pass
                     elif button.is_clicked(event) and button.text == "List":
                         # Print List
+                        for i in intersectionList:
+                            log_box.add_message("Hello")
+
                         print("intersectionList: ", intersectionList)
                         pass
 
@@ -456,6 +523,7 @@ def mapBuilder(screen):
         builder.draw_buttons()
 
         goBack.draw(screen)
+        log_box.draw()
         pygame.display.flip()
         clock.tick(FPS)
 
