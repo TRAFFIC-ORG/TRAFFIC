@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] GameObject trafficLightPre;
+    [SerializeField] GameObject trafficLightPre, simController;
     [SerializeField] Sprite redLight, greenLight;
     [SerializeField] bool debugMode;
     private GameObject[] trafficLights;
     private SpriteRenderer[] trafficLightSprites;
+    private SimControl controller;
     private int currentLightState; //1 is North/South, -1 is East/West
     // Start is called before the first frame update
     void Start()
     {
+        simController = GameObject.Find("SimControl");
         currentLightState = 1;
+        controller = simController.GetComponent<SimControl>();
         trafficLights = new GameObject[4];
         trafficLightSprites = new SpriteRenderer[4];
         trafficLights[0] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x,this.transform.position.y+0.3f,0), Quaternion.identity,this.transform);
@@ -26,12 +29,31 @@ public class Node : MonoBehaviour
         if(debugMode){
             StartCoroutine(DebugLightMode());
         }
+        else{
+            StartCoroutine(AILightMode());
+        }
     }
+    IEnumerator AILightMode(){
+        while(true){
+            float[] testArray = new float[4]{(int)Random.Range(0,5),(int)Random.Range(0,5),(int)Random.Range(0,5),(int)Random.Range(0,5)};
+            currentLightState *= controller.getBrainOutput(testArray);
+            switch(currentLightState){
+                case -1:
+                trafficLightSprites[0].sprite = redLight;
+                trafficLightSprites[1].sprite = greenLight;
+                trafficLightSprites[2].sprite = redLight;
+                trafficLightSprites[3].sprite = greenLight;
+                break;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                case 1:
+                trafficLightSprites[0].sprite = greenLight;
+                trafficLightSprites[1].sprite = redLight;
+                trafficLightSprites[2].sprite = greenLight;
+                trafficLightSprites[3].sprite = redLight;
+                break;
+            }
+            yield return new WaitForSeconds(2);
+        }
     }
     IEnumerator DebugLightMode(){
         while(true){

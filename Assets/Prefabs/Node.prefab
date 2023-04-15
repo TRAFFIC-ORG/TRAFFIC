@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trafficLightPre: {fileID: 4451014833329082506, guid: 2bb3580a362a9664c964f508a93c862f, type: 3}
+  simController: {fileID: 0}
   redLight: {fileID: 1334648894, guid: f1a51eec449d0fb4ab33baa75ca22b80, type: 3}
   greenLight: {fileID: 739692382, guid: f1a51eec449d0fb4ab33baa75ca22b80, type: 3}
-  debugMode: 1
+  debugMode: 0
