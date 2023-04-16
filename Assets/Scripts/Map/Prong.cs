@@ -1,24 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Intersection : MonoBehaviour
+using UnityEngine.SceneManagement;
+public class Prong : MonoBehaviour
 {
     [SerializeField] GameObject control;
     MapControl map;
     // Start is called before the first frame update
     void Start()
     {
-        map = GameObject.Find("MapControl").GetComponent<MapControl>();
+        if(SceneManager.GetActiveScene().buildIndex == 1){
+            map = GameObject.Find("MapControl").GetComponent<MapControl>();
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnMouseDown() {
+        Debug.Log("works");
         map.setIntersection(this.gameObject);
     }
 }

@@ -19,10 +19,12 @@ public class Node : MonoBehaviour
         controller = simController.GetComponent<SimControl>();
         trafficLights = new GameObject[4];
         trafficLightSprites = new SpriteRenderer[4];
+
         trafficLights[0] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x,this.transform.position.y+0.3f,0), Quaternion.identity,this.transform);
         trafficLights[1] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x+0.25f,this.transform.position.y,0), Quaternion.identity,this.transform);
         trafficLights[2] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x,this.transform.position.y-0.3f,0), Quaternion.identity,this.transform);
         trafficLights[3] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x-0.25f,this.transform.position.y,0), Quaternion.identity,this.transform);
+
         for(int i=0; i<trafficLights.Length; i++){
             trafficLightSprites[i] = trafficLights[i].GetComponent<SpriteRenderer>();
         }

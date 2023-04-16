@@ -13,6 +13,7 @@ public class MapControl : MonoBehaviour
     private int currentIntersection;
     private GameObject[] selectedIntersection;
     private TMP_InputField nameInputText;
+    private bool buttonPressed;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,12 +22,21 @@ public class MapControl : MonoBehaviour
         currentIntersection = 0;
         selectedIntersection = new GameObject[2];
         nameInputText = nameInput.GetComponent<TMP_InputField>();
+        buttonPressed = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetMouseButtonDown(0) && Camera.main.ScreenToWorldPoint(Input.mousePosition).y > -3.5f && !roadSelected && !buttonPressed){
+            Vector2 mousePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            intersections.Add(Instantiate(intersectionPrefab,new Vector3(mousePostion.x,mousePostion.y,0),Quaternion.identity));
+            intersections[intersections.Count-1].name = intersections.Count+"";
+            buttonPressed = true;
+        }
+        if(Input.GetMouseButtonUp(0)){
+            buttonPressed = false;
+        }
     }
     public void goBack(){
         SceneManager.LoadScene(0);
@@ -50,14 +60,6 @@ public class MapControl : MonoBehaviour
     }
     public void setRoad(bool newRoad){
         roadSelected = newRoad;
-    }
-    private void OnMouseDown() {
-        Vector2 mousePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //Add intersection
-        if(roadSelected == false){
-            intersections.Add(Instantiate(intersectionPrefab,new Vector3(mousePostion.x,mousePostion.y,0),Quaternion.identity));
-            intersections[intersections.Count-1].name = intersections.Count+"";
-        }
     }
     public void saveMap(){
         List<string> mapStrings = new List<string>();

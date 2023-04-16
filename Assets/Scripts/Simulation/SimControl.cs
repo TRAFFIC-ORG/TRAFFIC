@@ -10,14 +10,25 @@ public class SimControl : MonoBehaviour
     private Brain network;
     private float[][] weights;
     [SerializeField]private GameObject[] holders;
+    [SerializeField] private GameObject nameInput;
+    private TMP_InputField nameInputText;
+    private string mapName;
     private void Start() {
         loadWeights();
         network = new Brain(weights);
+        nameInputText = nameInput.GetComponent<TMP_InputField>();
     }
     public void setSelection(int newSelection){
         this.selection = newSelection;
         holders[selection].SetActive(true);
         holders[2].SetActive(false);
+        mapName = nameInputText.text;
+    }
+    public int getSelection(){
+        return selection;
+    }
+    public string getMapName(){
+        return mapName;
     }
     public void goBack(){
         SceneManager.LoadScene(0);
