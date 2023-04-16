@@ -202,7 +202,7 @@ def simScreen(screen):
         for horizontal in range(horzRoads-1):
             nodeDict[(horizontal*horzRoads) +
                      vertical][((horizontal+1)*horzRoads)+vertical] = 1
-    print(nodeDict)
+    # print(nodeDict)
 
     i = 0
     # horizonally connecting the roads
@@ -215,21 +215,23 @@ def simScreen(screen):
         for horizontal in range(horzRoads-1):
             nodeDict[(horizontal*horzRoads) +
                      vertical][((horizontal+1)*horzRoads)+vertical] = 1
-    print("node dict")
-    print(nodeDict)
+    # print("node dict")
+    # print(nodeDict)
 
     # Generate a grid with the nodes and the traffic lights
     grid = TrafficLights(nodes, nodeDict, screen, nodePositions)
-    print("Grid.grid")
-    print(list(grid.grid))
-    print("Node Positions")
-    print(grid.nodePositions)
+    # print("Grid.grid")
+    # print(list(grid.grid))
+    # print("Node Positions")
+    # print(grid.nodePositions)
 
     path = grid.generatePath(0, 37)
-    print("path")
-    print(path)
+    # print("path")
+    # print(path)
 
     car = Car(grid.nodePositions, 0, path)
+    car.drawSelf(screen)
+    
     #Debug Lights
     currentState = 1
     switched = False

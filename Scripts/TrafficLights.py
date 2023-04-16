@@ -1,6 +1,7 @@
 import sys
 import pygame as pg
 import queue
+import Car
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -143,8 +144,9 @@ class TrafficLights(object):
         queue.put(car)
 
     #Function to remove a car from the queue
-    def removeFromQue(self, car):
-        queue.get()
+    def removeFromQue(self):
+        car = queue.get()
+        car.nextNode()
 
     def printQue(self):
         print(queue)
