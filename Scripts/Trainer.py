@@ -10,7 +10,7 @@ class Trainer(object):
         self.switched = False
     def switchSim(self):
         self.currentSim += 1 
-        print(self.currentSim)
+        # print(self.currentSim)
         if self.currentSim == len(self.sims):
             self.currentSim -= 1
             self.train()

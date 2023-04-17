@@ -79,8 +79,8 @@ class TrafficLights(object):
                     visitedNodes[neighbor] = currentShortestNode
             unvisitedNodes.remove(currentShortestNode)
 
-        if endNode not in visitedNodes:
-            raise ValueError("End node is not a valid node in the graph")
+        # if endNode not in visitedNodes:
+        #     raise ValueError("End node is not a valid node in the graph")
 
         path = []
         temp_node = endNode

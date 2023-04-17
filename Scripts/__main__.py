@@ -179,6 +179,8 @@ def simScreen(screen):
     nodeDict = {}
     nodePositions = {}
     nodes = []
+    spawnLocations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 23, 24, 31, 32, 39, 40, 47, 48, 55, 56, 57, 58, 59, 60, 61, 62, 63]
+    carList = []
 
     # Creating the nodes list based on the ammount of vertical and horizontal nodes
     for i in range(vertRoads*horzRoads):
@@ -229,8 +231,21 @@ def simScreen(screen):
     # print("path")
     # print(path)
 
-    car = Car(grid.nodePositions, 0, path)
-    car.drawSelf(screen)
+    for i in range(500):
+        startingNode = random.choice(spawnLocations)
+        endNode = random.randint(0, 63)
+        newpath = grid.generatePath(startingNode, endNode)
+        carList.append(Car(grid.nodePositions, startingNode, newpath))
+
+    #Debug code
+    # firstpath = grid.generatePath(9,5)
+    # secondpath = grid.generatePath(9,0)
+    # print("Paths:")
+    # print(firstpath)
+    # print(secondpath)
+    # carList = [Car(grid.nodePositions, 9, firstpath)]
+    # carList.append(Car(grid.nodePositions, 9, secondpath))
+
     
     #Debug Lights
     currentState = 1
@@ -268,22 +283,31 @@ def simScreen(screen):
             road.drawSelf(0, startY, False)
             startY += roadIncrementY
         
-        #Draw the path for the car
-        grid.drawNodes(path, 0,37)
         
-        car.moveCar()
+        for i in range(len(carList)):
+            carList[i].moveCar()
+            if not carList[i].moving:
+                # TODO implement the code that changes the moving to true if the light is green
+                # the cars have an attribute called currentNode which will tell you what node the current car is at
+                # the cars also have a attribute called movingUP/Down or movingLeft/Right that will tell you what way the car is facing
+                # just check to see if the light is green at that location and which way the car is facing
+                pass
+            if not carList[i].atDest:
+                carList[i].draw(screen)
+
+
         for i in range(len(grid.getNodes())):
             carsWaitingEast= random.uniform(1,10)
             carsWaitingWest= random.uniform(1,10)
             carsWaitingNorth= random.uniform(1,10)
             carsWaitingSouth= random.uniform(1,10)
             #This is the code to change if you want debug or not
-            #grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
-            # if(pygame.time.get_ticks() % 5000 >= 4976 and switched == False):
-            #     currentState *= -1
-            #     switched = True
-            # if(pygame.time.get_ticks() % 5000 < 100):
-            #     switched = False
+            # grid.lightState(i,perceptron.createSum([carsWaiting,carsWaiting2]))
+            if(pygame.time.get_ticks() % 5000 >= 4976 and switched == False):
+                currentState *= -1
+                switched = True
+            if(pygame.time.get_ticks() % 5000 < 100):
+                switched = False
             grid.lightState(i,currentSim.getLightState([carsWaitingEast,carsWaitingWest,carsWaitingSouth,carsWaitingNorth]))
         #Current Sim Code
         if(trainer.shouldSwitch()):
@@ -291,7 +315,6 @@ def simScreen(screen):
             currentSim = trainer.getCurrentSim()
         #Draw the elements on the screen
         goBack.draw(screen)
-        car.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
