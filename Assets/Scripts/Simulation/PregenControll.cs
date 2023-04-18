@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PregenControll : MonoBehaviour
 {
-    [SerializeField] private GameObject roadPrefab, nodesPrefab, nodeHolder;
+    [SerializeField] private GameObject roadPrefab, nodesPrefab, nodeHolder, simControll;
     List<GameObject> nodes; 
     // Start is called before the first frame update
     void Start()
     {
         nodes = new List<GameObject>();
-        int horizontalRoad = 10;
+        int horizontalRoad = 9;
         int verticalRoad = 15;
         //HorizontalRoads
         float currentY = 3.5f;
@@ -31,20 +31,41 @@ public class PregenControll : MonoBehaviour
         }
         float nodeY = 3.5f;
         float nodeX = -6.5f;
+        int currentNode = 0;
         for(int i=0; i<horizontalRoad; i++){
             for(int j=0; j<verticalRoad; j++){
                 GameObject newNode = Instantiate(nodesPrefab, new Vector3(nodeX,nodeY,0), Quaternion.identity, nodeHolder.transform);
+                newNode.name = currentNode+"";
                 nodes.Add(newNode);
                 nodeX ++;
+                currentNode++;
             }
             nodeX = -6.5f;
             nodeY --;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        for(int i=0; i<nodes.Count; i++){
+            List<Node> neighbors = new List<Node>();
+            //If i is not in the first row
+            if(i > 14){
+                //They will have a northern neighbor
+                neighbors.Add(nodes[i-15].GetComponent<Node>());
+            }
+            //If i is not in the last row
+            if(i < 120){
+                //They will have a southern neighbor
+                neighbors.Add(nodes[i+15].GetComponent<Node>());
+            }
+            //if(i%)
+            if(i%15 != 0){
+                //They will have a western neighbor
+                neighbors.Add(nodes[i-1].GetComponent<Node>());
+            }
+            if(i%15 != 14){
+                //They will have a eastern neighbor
+                neighbors.Add(nodes[i+1].GetComponent<Node>());
+            }
+            nodes[i].GetComponent<Node>().setNeighbors(neighbors);
+        }
+        simControll.GetComponent<SimControl>().setNodes(nodes);
     }
 }

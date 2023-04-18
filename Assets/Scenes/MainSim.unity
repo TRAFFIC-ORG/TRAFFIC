@@ -307,6 +307,7 @@ MonoBehaviour:
   roadPrefab: {fileID: 2652136357499503516, guid: 94d656e11470acd4f8638dee12830800, type: 3}
   nodesPrefab: {fileID: 2666123874788437114, guid: 2d0e3c8f43c33a544a4f015f51828d77, type: 3}
   nodeHolder: {fileID: 1428598147}
+  simControll: {fileID: 834434094}
 --- !u!1 &361105944
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class SimControl : MonoBehaviour
     [SerializeField] private GameObject nameInput;
     private TMP_InputField nameInputText;
     private string mapName;
+    private List<GameObject> nodes;
     private void Start() {
         loadWeights();
         network = new Brain(weights);
@@ -50,6 +51,12 @@ public class SimControl : MonoBehaviour
             }
             reader.Close();
         }
+    }
+    public void setNodes(List<GameObject> nodes){
+        this.nodes = nodes;
+    }
+    public List<GameObject> GetNodes(){
+        return nodes;
     }
     public int getBrainOutput(float[] inputs){
         return network.chooseState(inputs);

@@ -31,7 +31,7 @@ public class MapControl : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && Camera.main.ScreenToWorldPoint(Input.mousePosition).y > -3.5f && !roadSelected && !buttonPressed){
             Vector2 mousePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             intersections.Add(Instantiate(intersectionPrefab,new Vector3(mousePostion.x,mousePostion.y,0),Quaternion.identity));
-            intersections[intersections.Count-1].name = intersections.Count+"";
+            intersections[intersections.Count-1].name = (intersections.Count-1)+"";
             buttonPressed = true;
         }
         if(Input.GetMouseButtonUp(0)){
@@ -52,6 +52,9 @@ public class MapControl : MonoBehaviour
                 currentLine.SetPosition(0,selectedIntersection[0].transform.position);
                 currentLine.SetPosition(1,selectedIntersection[1].transform.position);
                 currentIntersection = 0;
+
+                selectedIntersection[0].GetComponentInParent<Intersection>().addNeighbor(int.Parse(selectedIntersection[1].transform.parent.name));
+                selectedIntersection[1].GetComponentInParent<Intersection>().addNeighbor(int.Parse(selectedIntersection[0].transform.parent.name));
             }
             else{
                 currentIntersection ++;
@@ -68,10 +71,12 @@ public class MapControl : MonoBehaviour
             Debug.Log("Please input a map name");
         }
         else{
-            //Type:x,y
+            //Type:x,y:neighbors1,neighbor2,...
             for(int i=0; i<intersections.Count; i++){
                 string currentIntersectionString = "I:";
-                currentIntersectionString += intersections[i].transform.position.x + "," + intersections[i].transform.position.y;
+                currentIntersectionString += intersections[i].transform.position.x + "," + intersections[i].transform.position.y + ":";
+                Debug.Log(intersections[i].GetComponent<Intersection>().neighborsToString());
+                currentIntersectionString += intersections[i].GetComponent<Intersection>().neighborsToString();
                 mapStrings.Add(currentIntersectionString);
             }
             //Type:x,y:x2,y2

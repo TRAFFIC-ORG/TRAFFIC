@@ -18,9 +18,10 @@ public class CustomControl : MonoBehaviour
         roads = new List<GameObject>();
         controller = simControl.GetComponent<SimControl>();
         loadMap();
-        for(int i = 0; i<intersections.Count; i++){
-            nodes.Add(Instantiate(nodePrefab,intersections[i].transform.position,Quaternion.identity,nodeHolder.transform));
+        for(int i=0; i<nodes.Count; i++){
+            nodes[i].GetComponent<Node>().findNeighbors();
         }
+        controller.setNodes(nodes);
     }
     public void loadMap(){
         string currentMap = controller.getMapName();
@@ -33,6 +34,11 @@ public class CustomControl : MonoBehaviour
                         string[] pos = line[1].Split(",");
                         intersections.Add(Instantiate(intersectionPrefab,new Vector3(float.Parse(pos[0]),float.Parse(pos[1]),0),Quaternion.identity));
                         intersections[intersections.Count-1].name = intersections.Count+"";
+                        intersections[intersections.Count-1].GetComponent<SpriteRenderer>().enabled = false;
+                        nodes.Add(Instantiate(nodePrefab,intersections[intersections.Count-1].transform.position,Quaternion.identity,nodeHolder.transform));
+                        string[] neighbors = line[2].Split(",");
+                        nodes[nodes.Count-1].GetComponent<Node>().setNeighborString(neighbors);
+                        nodes[nodes.Count-1].name = intersections.Count -1 +"";
                     }
                     else if(line[0] == "R"){
                         string[] pos1 = line[1].Split(",");
