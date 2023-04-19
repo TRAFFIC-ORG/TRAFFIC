@@ -10,8 +10,8 @@ public class PregenControll : MonoBehaviour
     void Start()
     {
         nodes = new List<GameObject>();
-        int horizontalRoad = 9;
-        int verticalRoad = 15;
+        int horizontalRoad = 5;
+        int verticalRoad = 7;
         //HorizontalRoads
         float currentY = 3.5f;
         for(int i = 0; i<horizontalRoad; i++){
@@ -19,7 +19,7 @@ public class PregenControll : MonoBehaviour
             LineRenderer newLine = newRoad.GetComponent<LineRenderer>();
             newLine.SetPosition(0, new Vector3(-12,currentY,0));
             newLine.SetPosition(1, new Vector3(12,currentY,0));
-            currentY --;
+            currentY -= 2;
         }
         float currentX = -6.5f;
         for(int i = 0; i<verticalRoad; i++){
@@ -27,7 +27,7 @@ public class PregenControll : MonoBehaviour
             LineRenderer newLine = newRoad.GetComponent<LineRenderer>();
             newLine.SetPosition(0, new Vector3(currentX,-5,0));
             newLine.SetPosition(1, new Vector3(currentX,5,0));
-            currentX ++;
+            currentX +=2;
         }
         float nodeY = 3.5f;
         float nodeX = -6.5f;
@@ -37,30 +37,30 @@ public class PregenControll : MonoBehaviour
                 GameObject newNode = Instantiate(nodesPrefab, new Vector3(nodeX,nodeY,0), Quaternion.identity, nodeHolder.transform);
                 newNode.name = currentNode+"";
                 nodes.Add(newNode);
-                nodeX ++;
+                nodeX +=2;
                 currentNode++;
             }
             nodeX = -6.5f;
-            nodeY --;
+            nodeY -= 2;
         }
         for(int i=0; i<nodes.Count; i++){
             List<Node> neighbors = new List<Node>();
             //If i is not in the first row
-            if(i > 14){
+            if(i > 6){
                 //They will have a northern neighbor
-                neighbors.Add(nodes[i-15].GetComponent<Node>());
+                neighbors.Add(nodes[i-7].GetComponent<Node>());
             }
             //If i is not in the last row
-            if(i < 120){
+            if(i < 28){
                 //They will have a southern neighbor
-                neighbors.Add(nodes[i+15].GetComponent<Node>());
+                neighbors.Add(nodes[i+7].GetComponent<Node>());
             }
             //if(i%)
-            if(i%15 != 0){
+            if(i%7 != 0){
                 //They will have a western neighbor
                 neighbors.Add(nodes[i-1].GetComponent<Node>());
             }
-            if(i%15 != 14){
+            if(i%7 != 6){
                 //They will have a eastern neighbor
                 neighbors.Add(nodes[i+1].GetComponent<Node>());
             }

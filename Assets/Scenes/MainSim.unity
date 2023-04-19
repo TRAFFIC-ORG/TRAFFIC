@@ -1032,6 +1032,7 @@ MonoBehaviour:
   - {fileID: 1419366864}
   - {fileID: 1389239020}
   nameInput: {fileID: 1808768711}
+  carPre: {fileID: 4110172932804326570, guid: 598dc213c7d5745489577eab3cd91026, type: 3}
 --- !u!1 &873002148
 GameObject:
   m_ObjectHideFlags: 0

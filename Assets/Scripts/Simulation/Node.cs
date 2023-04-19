@@ -7,6 +7,7 @@ public class Node : MonoBehaviour
     [SerializeField] GameObject trafficLightPre, simController;
     [SerializeField] Sprite redLight, greenLight;
     [SerializeField] bool debugMode;
+    [SerializeField] private GameObject[] sections; //NE,SE,SW,NW
     private GameObject[] trafficLights;
     private SpriteRenderer[] trafficLightSprites;
     private SimControl controller;
@@ -14,6 +15,10 @@ public class Node : MonoBehaviour
     private string text;
     private int cost;
     private List<Node> neighbors;
+    private List<Car> carsWaitingNorth;
+    private List<Car> carsWaitingEast;
+    private List<Car> carsWaitingSouth;
+    private List<Car> carsWaitingWest;
     private string[] neighborString;
     // Start is called before the first frame update
     void Start()
@@ -29,8 +34,14 @@ public class Node : MonoBehaviour
         trafficLights[2] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x,this.transform.position.y-0.3f,0), Quaternion.identity,this.transform);
         trafficLights[3] = Instantiate(trafficLightPre, new Vector3(this.transform.position.x-0.25f,this.transform.position.y,0), Quaternion.identity,this.transform);
 
+        carsWaitingNorth = new List<Car>();
+        carsWaitingEast = new List<Car>();
+        carsWaitingSouth = new List<Car>();
+        carsWaitingWest = new List<Car>();
+
         for(int i=0; i<trafficLights.Length; i++){
             trafficLightSprites[i] = trafficLights[i].GetComponent<SpriteRenderer>();
+            trafficLightSprites[i].name = i+4+"";
         }
         if(debugMode){
             StartCoroutine(DebugLightMode());
@@ -40,6 +51,26 @@ public class Node : MonoBehaviour
         }
         cost = 1;
     }
+    public void addToQue(int que, Car carInQue){
+        switch(que){
+            case 0:
+            carsWaitingNorth.Add(carInQue);
+            break;
+
+            case 1:
+            carsWaitingEast.Add(carInQue);
+            break;
+
+            case 2:
+            carsWaitingSouth.Add(carInQue);
+            break;
+
+            case 3:
+            carsWaitingWest.Add(carInQue);
+            break;
+        }
+    }
+    public GameObject getSide(int side){return sections[side];}
     public int getCost(){return cost;}
     public void setText(string text){this.text = text;}
     public string getText(){return this.text;}
@@ -54,8 +85,8 @@ public class Node : MonoBehaviour
     }   
     IEnumerator AILightMode(){
         while(true){
-            float[] testArray = new float[4]{(int)Random.Range(0,5),(int)Random.Range(0,5),(int)Random.Range(0,5),(int)Random.Range(0,5)};
-            currentLightState *= controller.getBrainOutput(testArray);
+            float[] input = new float[4]{carsWaitingNorth.Count, carsWaitingEast.Count, carsWaitingSouth.Count, carsWaitingWest.Count};
+            currentLightState *= controller.getBrainOutput(input);
             switch(currentLightState){
                 case -1:
                 trafficLightSprites[0].sprite = redLight;
@@ -71,8 +102,33 @@ public class Node : MonoBehaviour
                 trafficLightSprites[3].sprite = redLight;
                 break;
             }
+            removeLight();
             yield return new WaitForSeconds(2);
         }
+    }
+    public void removeLight(){
+        for(int i=0; i<2; i++){
+                if(currentLightState == -1){
+                    if(carsWaitingEast.Count > 0){
+                        carsWaitingEast[0].removeFromQue();
+                        carsWaitingEast.RemoveAt(0);
+                    }
+                    if(carsWaitingWest.Count > 0){
+                        carsWaitingWest[0].removeFromQue();
+                        carsWaitingWest.RemoveAt(0);
+                    }
+                }
+                else{
+                    if(carsWaitingNorth.Count > 0){
+                        carsWaitingNorth[0].removeFromQue();
+                        carsWaitingNorth.RemoveAt(0);
+                    }
+                    if(carsWaitingSouth.Count > 0){
+                        carsWaitingSouth[0].removeFromQue();
+                        carsWaitingSouth.RemoveAt(0);
+                    }
+                }
+            }
     }
     IEnumerator DebugLightMode(){
         while(true){
@@ -92,6 +148,7 @@ public class Node : MonoBehaviour
                 trafficLightSprites[3].sprite = redLight;
                 break;
             }
+            removeLight();
             yield return new WaitForSeconds(5);
         }
     }

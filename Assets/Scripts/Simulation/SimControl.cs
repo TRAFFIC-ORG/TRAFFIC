@@ -10,7 +10,7 @@ public class SimControl : MonoBehaviour
     private Brain network;
     private float[][] weights;
     [SerializeField]private GameObject[] holders;
-    [SerializeField] private GameObject nameInput;
+    [SerializeField] private GameObject nameInput, carPre;
     private TMP_InputField nameInputText;
     private string mapName;
     private List<GameObject> nodes;
@@ -24,6 +24,7 @@ public class SimControl : MonoBehaviour
         holders[selection].SetActive(true);
         holders[2].SetActive(false);
         mapName = nameInputText.text;
+        StartCoroutine(spawnCars());
     }
     public int getSelection(){
         return selection;
@@ -50,6 +51,15 @@ public class SimControl : MonoBehaviour
                 }
             }
             reader.Close();
+        }
+    }
+    IEnumerator spawnCars(){
+        while(true){
+            int numberToGen = (int)Random.Range(0,4);
+            for(int i=0; i<numberToGen; i++){
+                Instantiate(carPre, new Vector3(0,0,0), Quaternion.identity);
+            }
+            yield return new WaitForSeconds(2);
         }
     }
     public void setNodes(List<GameObject> nodes){
