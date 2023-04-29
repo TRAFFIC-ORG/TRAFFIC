@@ -20,6 +20,7 @@ public class Car : MonoBehaviour
     private bool hasExited;
     private int previousSide;
     private bool inQue;
+    private int secondsAtLight;
     void Start()
     {
         mainControll = GameObject.Find("SimControl").GetComponent<SimControl>();
@@ -44,6 +45,8 @@ public class Car : MonoBehaviour
         exitingSide = -1;
         hasExited = false;
         inQue =false;
+        secondsAtLight = 0;
+        StartCoroutine(lightTracker());
     }
     void Update(){
         if(inQue){
@@ -57,11 +60,21 @@ public class Car : MonoBehaviour
             transform.position += direction * carSpeed * Time.deltaTime;
         }
     }
+    IEnumerator lightTracker(){
+        while(true){
+            if(inQue){
+                secondsAtLight ++;
+                Debug.Log(secondsAtLight);
+            }
+            yield return new WaitForSeconds(1);
+        }
+    }
     public void removeFromQue(){this.inQue = false;}
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Node"){
             if(other.GetComponent<Node>() == pathArray[nextNodeNumber]){
                 if(other.GetComponent<Node>() == endNode){
+                    mainControll.addTime(secondsAtLight);
                     Destroy(this.gameObject);
                 }
                 else{
@@ -74,7 +87,7 @@ public class Car : MonoBehaviour
             }
         }
         if(other.tag == "Light"){
-            if(isEntering && hasExited == false){
+            if(isEntering && hasExited == false && inQue == false){
                 exitingSide = -1;
                 int que = 0;
                 enteringSide = int.Parse(other.transform.name);
@@ -96,7 +109,7 @@ public class Car : MonoBehaviour
 
                     case 7:
                         enteringSide = 2;
-                        que = 7;
+                        que = 3;
                     break;
                 }
                 if(other.GetComponent<SpriteRenderer>().sprite == greenLight){
@@ -104,11 +117,10 @@ public class Car : MonoBehaviour
                 }
                 else{
                     inQue = true;
-                    Debug.Log(inQue);
                     other.transform.parent.GetComponent<Node>().addToQue(que, this);
                 }
             }
-            else if(!isEntering && !hasExited){
+            else if(!isEntering && !hasExited && !inQue){
                 exitingSide = int.Parse(other.transform.name);
                 switch(exitingSide){
                     case 4:
@@ -142,12 +154,10 @@ public class Car : MonoBehaviour
                 else{
                     hasExited = true;
                     if(nextNodeNumber >= 1){
-                        Debug.Log("test");
                         this.transform.position = pathArray[nextNodeNumber-1].getSide(previousSide).transform.position;
                     }
                     else{
                         this.transform.position = startNode.getSide(previousSide).transform.position;
-                        Debug.Log("ol");
                     }
                 }
                 Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward,-1*(pathArray[nextNodeNumber].getSide(exitingSide).transform.position - transform.position).normalized);
@@ -155,6 +165,11 @@ public class Car : MonoBehaviour
             }
             if(hasExited){
                 hasExited = false;
+            }
+            if(inQue){
+                if(other.GetComponent<SpriteRenderer>().sprite == greenLight){
+                    inQue = false;
+                }
             }
             isEntering = !isEntering;
         }
@@ -189,7 +204,6 @@ public class Car : MonoBehaviour
         }
         if (nextNodeToGoal.ContainsKey(start) == false)
         {
-            Debug.Log("Test");
             return null;
         }
 

@@ -130,7 +130,6 @@ public class MapControl : MonoBehaviour
             Directory.CreateDirectory(folderPath);
         }
        string path = folderPath + selectedMap + ".txt";
-       Debug.Log(path);
        File.WriteAllText(path, "");
        //Write some text to the test.txt file
        StreamWriter writer = new StreamWriter(path, true);

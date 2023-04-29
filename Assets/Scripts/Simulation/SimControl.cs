@@ -10,14 +10,18 @@ public class SimControl : MonoBehaviour
     private Brain network;
     private float[][] weights;
     [SerializeField]private GameObject[] holders;
-    [SerializeField] private GameObject nameInput, carPre;
+    [SerializeField] private GameObject nameInput, carPre, displayAvg;
+    private TextMeshProUGUI displayAvgText;
     private TMP_InputField nameInputText;
     private string mapName;
+    private float wholeTime;
+    private float numberCar;
     private List<GameObject> nodes;
     private void Start() {
         loadWeights();
         network = new Brain(weights);
         nameInputText = nameInput.GetComponent<TMP_InputField>();
+        displayAvgText = displayAvg.GetComponent<TextMeshProUGUI>();
     }
     public void setSelection(int newSelection){
         this.selection = newSelection;
@@ -34,6 +38,11 @@ public class SimControl : MonoBehaviour
     }
     public void goBack(){
         SceneManager.LoadScene(0);
+    }
+    public void addTime(int addedSeconds){
+        wholeTime += addedSeconds;
+        numberCar ++;
+        displayAvgText.text = wholeTime/numberCar + "";
     }
     public void loadWeights(){
         List<string> mapStrings = new List<string>();

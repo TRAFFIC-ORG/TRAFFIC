@@ -490,7 +490,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 29953878}
         m_TargetAssemblyTypeName: MapControl, Assembly-CSharp
         m_MethodName: goBack
         m_Mode: 1
@@ -714,7 +714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 245.7, y: 30}
+  m_AnchoredPosition: {x: 186, y: 30}
   m_SizeDelta: {x: 92.6, y: 30.92999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &416274939
@@ -1402,7 +1402,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 378, y: 30}
+  m_AnchoredPosition: {x: 318.3, y: 30}
   m_SizeDelta: {x: 131.62, y: 30.92999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1276303348
@@ -1612,7 +1612,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -191, y: 30}
+  m_AnchoredPosition: {x: -172, y: 30}
   m_SizeDelta: {x: 92.599976, y: 30.92999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1393906062
@@ -1746,7 +1746,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 124, y: 31}
+  m_AnchoredPosition: {x: 75, y: 31}
   m_SizeDelta: {x: 160, y: 30.92999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1424061911
@@ -1922,7 +1922,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -92, y: 30}
+  m_AnchoredPosition: {x: -73, y: 30}
   m_SizeDelta: {x: 92.599976, y: 30.92999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1675366161
@@ -2067,7 +2067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}

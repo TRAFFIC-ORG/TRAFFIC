@@ -107,6 +107,10 @@ public class Node : MonoBehaviour
         }
     }
     public void removeLight(){
+        // Debug.Log("N-"+carsWaitingNorth.Count);
+        // Debug.Log("E-"+carsWaitingEast.Count);
+        // Debug.Log("S-"+carsWaitingWest.Count);
+        // Debug.Log("W-"+carsWaitingSouth.Count);
         for(int i=0; i<2; i++){
                 if(currentLightState == -1){
                     if(carsWaitingEast.Count > 0){
